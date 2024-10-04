@@ -1,7 +1,8 @@
-package com.assignment.hometab.presentation.home
+package com.assignment.hometab.presentation.wizarddetails
 
+import androidx.activity.OnBackPressedDispatcher
+import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -16,6 +17,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -26,8 +28,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.assignment.core.bases.BaseScreen
+import com.assignment.hometab.domain.wizard.model.WizardDetails
 import com.assignment.theme.component.SearchBarView
-import com.assignment.hometab.domain.wizard.model.Wizard
 import com.assignment.theme.component.ScaffoldTopAppbar
 import com.assignment.theme.theme.Gray10
 import com.assignment.theme.theme.Shapes
@@ -35,88 +37,95 @@ import com.assignment.theme.theme.Typography
 import com.assignment.theme.theme.color
 
 @Composable
-internal fun HomeScreen(
+internal fun WizardDetailsScreen(
     modifier: Modifier = Modifier,
-    viewModel: HomeViewModel = hiltViewModel(),
-    onWizardItemClick: (String) -> Unit,
+    viewModel: WizardDetailsViewModel = hiltViewModel(),
+    onBackBtnClick: (OnBackPressedDispatcher?) -> Unit,
+    wizardId: String?
 ) {
-    val wizardsUiState by viewModel.wizardSuccess.collectAsStateWithLifecycle()
+    val wizardUiState by viewModel.wizardDetailsSuccess.collectAsStateWithLifecycle()
     val state by viewModel.state.collectAsStateWithLifecycle()
-
-
+    val backDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
+    LaunchedEffect(Unit) {
+        viewModel.getWizardDetails(wizardId ?: "")
+    }
     BaseScreen(
         baseViewState = state,
         content = {
-            WizardListScreen(
+            WizardDetails(
                 modifier = modifier,
-                wizardUiState = wizardsUiState,
-
-                onWizardItemClick = onWizardItemClick,
-
-                )
+                wizardUiState = wizardUiState,
+//                onWizardItemClick = {},
+                onBackBtnClick = {
+                    onBackBtnClick.invoke(backDispatcher)
+                },
+            )
         },
         onRetry = {
-            viewModel.getWizardList()
+            viewModel.getWizardDetails(wizardId ?: "")
         }
     )
 
 }
 
 @Composable
-fun WizardListScreen(
+fun WizardDetails(
     modifier: Modifier = Modifier,
-    wizardUiState: List<Wizard>?,
-    onWizardItemClick: (String) -> Unit,
+    wizardUiState: WizardDetails?,
+//    onWizardItemClick: (Wizard) -> Unit,
+    onBackBtnClick: () -> Unit
 ) {
     var searchQuery by remember { mutableStateOf("") }
 
     ScaffoldTopAppbar(
-        title = "Wizard List",
+        title = (wizardUiState?.firstName ?: "Details") + " " + (wizardUiState?.lastName ?: ""),
+        subTitle = (wizardUiState?.elixirsCount ?: "0") + " " + "elixirs",
+        onNavigationIconClick = onBackBtnClick
     ) {
         Scaffold(
             modifier = modifier
                 .fillMaxSize()
                 .padding(it)
         ) { _ ->
-                val filteredWizards = wizardUiState?.filter { item ->
-                    item.firstName?.contains(
-                        searchQuery,
-                        ignoreCase = true
-                    ) == true || item.lastName?.contains(searchQuery, ignoreCase = true) == true
-                } ?: emptyList()
+            val filteredElixirs = wizardUiState?.elixirs?.filter { item ->
+                item?.name?.contains(
+                    searchQuery,
+                    ignoreCase = true
+                ) == true
+            } ?: emptyList()
 
-                LazyColumn {
-                    item {
-                        SearchBarView(
-                            query = searchQuery,
-                            onQueryChange = { searchQuery = it },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(16.dp)
-                        )
-                    }
-                    items(items = filteredWizards) { wizard ->
-                        WizardListItem(
-                            wizards = wizard,
-                            onItemClick = onWizardItemClick
-                        )
-                    }
+            LazyColumn {
+                item {
+                    SearchBarView(
+                        query = searchQuery,
+                        onQueryChange = { searchQuery = it },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp)
+                    )
                 }
+                items(items = filteredElixirs) { elixirs ->
+                    ElixirListItem(
+                        elixirs = elixirs,
+//                            onItemClick = onWizardItemClick
+                    )
+                }
+            }
         }
     }
 
 }
 
 @Composable
-private fun WizardListItem(
+private fun ElixirListItem(
     modifier: Modifier = Modifier,
-    wizards: Wizard,
-    onItemClick: (String) -> Unit
+    elixirs: WizardDetails.Elixir?,
+//    onItemClick: (Wizard) -> Unit
 ) {
     Box(modifier = modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp)) {
         Card(
-            modifier = modifier
-                .clickable { onItemClick(wizards.id) },
+            modifier = modifier,
+//                .clickable { onItemClick(wizards) },
             shape = Shapes.medium,
             border = BorderStroke(1.dp, Gray10),
         ) {
@@ -126,7 +135,7 @@ private fun WizardListItem(
                     .fillMaxWidth(),
             ) {
                 Text(
-                    text = wizards.firstName + wizards.lastName,
+                    text = elixirs?.name ?: "",
                     style = Typography.titleMedium,
                     maxLines = 2,
                     color = MaterialTheme.color.black,
@@ -136,7 +145,7 @@ private fun WizardListItem(
                 Spacer(modifier = modifier.height(10.dp))
 
                 Text(
-                    text = wizards.elixirsCount + " " + "elixirs",
+                    text = elixirs?.name ?: "",
                     style = Typography.labelMedium,
                     color = Gray10
                 )

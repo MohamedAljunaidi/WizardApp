@@ -9,10 +9,10 @@ import com.assignment.core.model.ServerExceptionType
  * Use this function to handle try, catch queries and mapping the result to ResultWrapper
  */
 inline fun <T> safeLocalDataCall(
-    queryCall: () -> T
+    queryCall: () -> T?
 ): ResultWrapper<T> {
     return runCatching {
-        queryCall()
+        queryCall() ?: throw Exception()
     }.toResultWrapper()
 }
 

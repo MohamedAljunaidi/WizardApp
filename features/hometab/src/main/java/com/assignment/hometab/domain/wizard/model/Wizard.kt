@@ -1,4 +1,4 @@
-package com.assignment.hometab.domain.home.model
+package com.assignment.hometab.domain.wizard.model
 
 import androidx.annotation.Keep
 

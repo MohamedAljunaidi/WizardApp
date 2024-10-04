@@ -14,7 +14,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.assignment.extension.SetNavGraph
 import com.assignment.hometab.navigation.homeNavigation
@@ -25,6 +24,9 @@ import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import com.assignment.theme.theme.color
@@ -63,9 +65,12 @@ class HomeTabActivity : ComponentActivity() {
 @Composable
 fun BottomNavigationBar(navController: NavHostController) {
     val items = listOf(BottomNavItem.Home, BottomNavItem.Profile)
-    val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentRoute = navBackStackEntry?.destination?.route
 
+
+    val startDestination = BottomNavItem.Home
+    var selectedTab by remember {
+        mutableIntStateOf(items.indexOf(startDestination))
+    }
     Surface(
         border = BorderStroke(.5.dp, MaterialTheme.color.white),
         shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
@@ -74,13 +79,16 @@ fun BottomNavigationBar(navController: NavHostController) {
             tonalElevation = 8.dp,
             containerColor = MaterialTheme.color.fieldColor
         ) {
-            items.forEach { item ->
+            items.forEachIndexed { index, screen ->
+                val isSelected = index == selectedTab
+
                 NavigationBarItem(
-                    icon = { Icon(item.icon, contentDescription = item.name) },
-                    label = { Text(item.name) },
-                    selected = currentRoute == item.route,
+                    icon = { Icon(screen.icon, contentDescription = screen.name) },
+                    label = { Text(screen.name) },
+                    selected = isSelected,
                     onClick = {
-                        navController.navigate(item.route) {
+                        selectedTab = index
+                        navController.navigate(screen.route) {
                             popUpTo(navController.graph.startDestinationId)
                             launchSingleTop = true
                         }
@@ -101,7 +109,7 @@ fun BottomNavigationBar(navController: NavHostController) {
 }
 
 sealed class BottomNavItem(val name: String, val route: String, val icon: ImageVector) {
-    object Home : BottomNavItem("Home", NavigationConstants.HOME_PATH, Icons.Default.Home)
-    object Profile :
+    data object Home : BottomNavItem("Home", NavigationConstants.HOME_PATH, Icons.Default.Home)
+    data object Profile :
         BottomNavItem("Favorite", NavigationConstants.FAVORITE_PATH, Icons.Default.Favorite)
 }

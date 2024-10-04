@@ -1,9 +1,9 @@
 package com.assignment.theme.component
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
-import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -12,6 +12,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
@@ -30,6 +31,7 @@ fun ScaffoldTopAppbar(
     containerColor: Color = MaterialTheme.colorScheme.background,
     contentColor: Color = contentColorFor(containerColor),
     title: String,
+    subTitle: String? = null,
     onNavigationIconClick: () -> Unit,
     navigationIcon: Painter = rememberVectorPainter(image = Icons.AutoMirrored.Outlined.ArrowBack),
     snackbarHost: @Composable () -> Unit = {},
@@ -44,11 +46,15 @@ fun ScaffoldTopAppbar(
         snackbarHost = snackbarHost,
         topBar = {
             Surface(shadowElevation = 1.dp) {
-                CenterAlignedTopAppBar(
+                TopAppBar(
                     title = {
-                        Text(text = title)
+                        Column {
+                            Text(text = title)
+                            if (subTitle != null)
+                                Text(text = subTitle, style = MaterialTheme.typography.labelSmall)
+                        }
                     },
-                    colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                    colors = TopAppBarDefaults.topAppBarColors(
                         containerColor = MaterialTheme.color.topAppBar,
                         navigationIconContentColor = MaterialTheme.color.black,
                         titleContentColor = MaterialTheme.color.black,

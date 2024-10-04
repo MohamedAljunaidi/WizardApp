@@ -145,20 +145,22 @@ fun ShowNetworkConnectionErrorDialog(
             onDismissRequest = {
                 onDismiss?.invoke()
                 shouldShowDialog.value = false
-
             },
             title = {
-                Text(text = stringResource(id = R.string.error_network_connection_title))
+                Text(text = stringResource(id = R.string.error_network_connection_title),   color = MaterialTheme.color.black)
             },
             text = {
-                Text(text = stringResource(id = R.string.error_network_connection_message))
+                Text(text = stringResource(id = R.string.error_network_connection_message),   color = MaterialTheme.color.black)
             },
             confirmButton = {
-                Button(
+                Button(  colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.color.white,
+                    contentColor = MaterialTheme.color.black
+                ),
                     onClick = {
                         onTryAgain?.invoke()
                         onDismiss?.invoke()
-                        shouldShowDialog.value = false
+                        shouldShowDialog.value = true
                     }
                 ) {
                     Text(text = stringResource(id = R.string.dialog_try_again))

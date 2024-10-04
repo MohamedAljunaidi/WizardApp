@@ -1,10 +1,10 @@
-package com.assignment.hometab.presentation.home
+package com.assignment.hometab.presentation.wizarddetails
 
 import com.assignment.core.bases.BaseViewModel
 import com.assignment.core.bases.BaseViewState
 import com.assignment.core.model.ResultWrapper
-import com.assignment.hometab.domain.wizard.model.Wizard
-import com.assignment.hometab.domain.wizard.usecases.GetWizardListUseCase
+import com.assignment.hometab.domain.wizard.model.WizardDetails
+import com.assignment.hometab.domain.wizard.usecases.GetWizardDetailsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -14,25 +14,21 @@ import kotlinx.coroutines.flow.onStart
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeViewModel @Inject constructor(
-    private val getWizardListUseCase: GetWizardListUseCase
+class WizardDetailsViewModel @Inject constructor(
+    private val getWizardDetailsUseCase: GetWizardDetailsUseCase
 ) : BaseViewModel() {
 
-    private var _wizardSuccess: MutableStateFlow<List<Wizard>?> =
+    private var _wizardDetailsSuccess: MutableStateFlow<WizardDetails?> =
         MutableStateFlow(null)
 
-    val wizardSuccess: StateFlow<List<Wizard>?> =
-        _wizardSuccess.asStateFlow()
+    val wizardDetailsSuccess: StateFlow<WizardDetails?> =
+        _wizardDetailsSuccess.asStateFlow()
 
 
-    init {
-        getWizardList()
-    }
-
-    fun getWizardList() {
+    fun getWizardDetails(wizardId: String) {
 
         launchCoroutine(coroutineExceptionHandler) {
-            getWizardListUseCase()
+            getWizardDetailsUseCase(wizardId)
                 .onStart {
                     _state.emit(BaseViewState.Loading)
                 }
@@ -43,7 +39,7 @@ class HomeViewModel @Inject constructor(
                     when (result) {
 
                         is ResultWrapper.Success -> {
-                            _wizardSuccess.emit(result.data)
+                            _wizardDetailsSuccess.emit(result.data)
                         }
 
                         is ResultWrapper.Error -> {

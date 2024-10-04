@@ -1,4 +1,4 @@
-package com.assignment.caching.roomdb.features.event.entities
+package com.assignment.caching.roomdb.features.wizard.entities
 
 
 import androidx.room.Entity
