@@ -37,7 +37,7 @@ android {
 
 dependencies {
     implementation(project(AppConfig.ModulePathsConstant.HOME_TAB))
-//    implementation(project(AppConfig.ModulePathsConstant.SEARCH))
+    implementation(project(AppConfig.ModulePathsConstant.ELIXIRS))
     implementation(project(AppConfig.ModulePathsConstant.NAVIGATION))
     implementation(project(AppConfig.ModulePathsConstant.THEME))
 

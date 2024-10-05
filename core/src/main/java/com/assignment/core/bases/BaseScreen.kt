@@ -14,10 +14,15 @@ import com.assignment.theme.theme.color
 fun BaseScreen(
     baseViewState: BaseViewState,
     content: @Composable () -> Unit,
-    onRetry: () -> Unit = {}
+    onRetry: () -> Unit = {},
 ) {
     when (baseViewState) {
+        is BaseViewState.Idle -> {
+
+        }
+
         is BaseViewState.Loading -> {
+            content()
             LoadingScreen()
         }
 

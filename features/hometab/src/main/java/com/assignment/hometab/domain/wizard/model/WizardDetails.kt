@@ -1,6 +1,5 @@
 package com.assignment.hometab.domain.wizard.model
 
-
 import androidx.annotation.Keep
 
 @Keep

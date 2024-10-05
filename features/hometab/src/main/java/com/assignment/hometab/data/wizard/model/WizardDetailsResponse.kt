@@ -1,6 +1,5 @@
 package com.assignment.hometab.data.wizard.model
 
-
 import com.google.gson.annotations.SerializedName
 import androidx.annotation.Keep
 

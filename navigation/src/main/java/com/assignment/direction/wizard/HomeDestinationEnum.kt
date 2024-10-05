@@ -1,4 +1,4 @@
-package com.assignment.direction.home
+package com.assignment.direction.wizard
 
 import android.os.Parcelable
 import com.assignment.navigation.bases.IBaseDestination

@@ -16,7 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.assignment.extension.SetNavGraph
-import com.assignment.hometab.navigation.homeNavigation
+import com.assignment.hometab.navigation.wizardNavigation
 import com.assignment.navigation.constants.NavigationConstants
 import com.assignment.theme.theme.WizardTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -28,6 +28,7 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.assignment.theme.theme.color
 
@@ -51,7 +52,7 @@ class HomeTabActivity : ComponentActivity() {
                         navController = navController,
                         startDestination = NavigationConstants.HOME_PATH,
                     ) {
-                        homeNavigation(
+                        wizardNavigation(
                             navController = navController,
                             modifier = Modifier.padding(innerPadding)
                         )
@@ -64,10 +65,12 @@ class HomeTabActivity : ComponentActivity() {
 
 @Composable
 fun BottomNavigationBar(navController: NavHostController) {
-    val items = listOf(BottomNavItem.Home, BottomNavItem.Profile)
+    val items = listOf(
+        BottomNavItem.Home(stringResource(id = R.string.title_home_tab)),
+        BottomNavItem.Favorite(stringResource(id = R.string.title_favorite_tab))
+    )
 
-
-    val startDestination = BottomNavItem.Home
+    val startDestination = items.first()
     var selectedTab by remember {
         mutableIntStateOf(items.indexOf(startDestination))
     }
@@ -91,6 +94,7 @@ fun BottomNavigationBar(navController: NavHostController) {
                         navController.navigate(screen.route) {
                             popUpTo(navController.graph.startDestinationId)
                             launchSingleTop = true
+                            restoreState = true
                         }
                     },
 
@@ -109,7 +113,9 @@ fun BottomNavigationBar(navController: NavHostController) {
 }
 
 sealed class BottomNavItem(val name: String, val route: String, val icon: ImageVector) {
-    data object Home : BottomNavItem("Home", NavigationConstants.HOME_PATH, Icons.Default.Home)
-    data object Profile :
-        BottomNavItem("Favorite", NavigationConstants.FAVORITE_PATH, Icons.Default.Favorite)
+    data class Home(val title: String) :
+        BottomNavItem(title, NavigationConstants.HOME_PATH, Icons.Default.Home)
+
+    data class Favorite(val title: String) :
+        BottomNavItem(title, NavigationConstants.FAVORITE_PATH, Icons.Default.Favorite)
 }

@@ -1,4 +1,4 @@
-package com.assigment.wizardapp
+package com.assignment.wizardapp
 
 import org.junit.Test
 

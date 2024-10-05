@@ -22,6 +22,6 @@ object DependencyVersions {
     const val coil_version = "2.6.0"
     const val hilt_compose_compiler_version = "1.2.0"
     const val hilt_navigation_version = "1.2.0"
-    const val navigation_version = "2.7.7"
+    const val navigation_version = "2.8.2"
     const val room_version = "2.6.1"
 }

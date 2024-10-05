@@ -7,6 +7,8 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavGraphBuilder
@@ -57,8 +59,8 @@ fun INavigatorDirection.navigateToDirection(
 @Composable
 fun SetNavGraph(
     navController: NavHostController = rememberNavController(),
-    startDestination: String?=null,
-    builder:  NavGraphBuilder.() -> Unit
+    startDestination: String? = null,
+    builder: NavGraphBuilder.() -> Unit
 ) {
 
     val activity = LocalContext.current.getActivity()
@@ -70,16 +72,43 @@ fun SetNavGraph(
                 DestinationHolder::class.java
             ) ?: DestinationHolder(startDestination)
         } else {
-            activity?.intent?.extras?.getParcelable(ExtraConstants.DESTINATION_KEY) ?: DestinationHolder(
-                startDestination
+            activity?.intent?.extras?.getParcelable(ExtraConstants.DESTINATION_KEY)
+                ?: DestinationHolder(
+                    startDestination
+                )
+        }
+
+    NavHost(
+        navController = navController,
+        startDestination = destination.destinationId.toString(),
+        builder = builder,
+        enterTransition = {
+            slideIntoContainer(
+                AnimatedContentTransitionScope.SlideDirection.Left,
+                animationSpec = tween(500)
+            )
+        },
+        exitTransition = {
+            slideOutOfContainer(
+                AnimatedContentTransitionScope.SlideDirection.Left,
+                animationSpec = tween(500)
+            )
+        },
+        popExitTransition = {
+            slideOutOfContainer(
+                AnimatedContentTransitionScope.SlideDirection.Right,
+                animationSpec = tween(500)
+            )
+        },
+        popEnterTransition = {
+            slideIntoContainer(
+                AnimatedContentTransitionScope.SlideDirection.Right,
+                animationSpec = tween(500)
             )
         }
 
-        NavHost(
-            navController = navController,
-            startDestination = destination.destinationId.toString(),
-            builder = builder
-        )
+
+    )
 }
 
 fun Context.getActivity(): ComponentActivity? = when (this) {

@@ -17,8 +17,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.assignment.direction.home.HomeNavigator
-import com.assignment.direction.home.HomeDestinationEnum
+import com.assignment.direction.wizard.HomeDestinationEnum
+import com.assignment.direction.wizard.HomeNavigator
 import com.assignment.extension.navigateToDirection
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay

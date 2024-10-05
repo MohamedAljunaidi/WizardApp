@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
-import com.assignment.caching.roomdb.features.wizarddetails.ElixirListConverter
+import com.assignment.caching.roomdb.features.wizarddetails.converter.ElixirListConverter
 
 @Entity
 data class WizardDetailsEntity(

@@ -10,6 +10,7 @@ import androidx.compose.ui.graphics.Color
 data class AppColor(
     val white: Color = Color.Unspecified,
     val black: Color = Color.Unspecified,
+    val subTitleColor: Color = Color.Unspecified,
     val topAppBar: Color = Color.Unspecified,
     val secondaryBackground: Color = Color.Unspecified,
     val fieldColor: Color = Color.Unspecified,
@@ -35,6 +36,7 @@ internal val LocalLightColorScheme = AppColor(
     borderColor = Gray10,
     selectedColor = Black,
     unSelectedColor = Black70,
+    subTitleColor = Black40,
 )
 
 internal val LocalDarkColorScheme = AppColor(
@@ -46,6 +48,7 @@ internal val LocalDarkColorScheme = AppColor(
     borderColor = Black,
     selectedColor = Gold,
     unSelectedColor = Black70,
+    subTitleColor = Gold,
 
     )
 

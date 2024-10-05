@@ -51,7 +51,11 @@ fun ScaffoldTopAppbar(
                         Column {
                             Text(text = title)
                             if (subTitle != null)
-                                Text(text = subTitle, style = MaterialTheme.typography.labelSmall)
+                                Text(
+                                    text = subTitle,
+                                    style = MaterialTheme.typography.labelSmall,
+                                    color = MaterialTheme.color.subTitleColor
+                                )
                         }
                     },
                     colors = TopAppBarDefaults.topAppBarColors(

@@ -8,7 +8,6 @@ object NetworkConstants {
     const val BASE_URL = BuildConfig.BASE_URL
     object ErrorCodes {
 
-        const val CLIENT_ERROR_UNAUTHORIZED = 401
         const val CLIENT_ERROR_FORBIDDEN = 403
         const val CLIENT_ERROR_RANGE_START = 400
         const val CLIENT_ERROR_RANGE_END = 499

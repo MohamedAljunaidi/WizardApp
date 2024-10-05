@@ -67,6 +67,4 @@ dependencies {
     androidTestImplementation(Dependencies.composeUiTestJunit4)
     androidTestImplementation(Dependencies.composeTooling)
     androidTestImplementation(Dependencies.composeUiTestManifest)
-    debugImplementation( "androidx.customview:customview:1.2.0-alpha01")
-    debugImplementation ("androidx.customview:customview-poolingcontainer:1.0.0-alpha01")
 }

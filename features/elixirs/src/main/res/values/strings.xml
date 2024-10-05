@@ -1,0 +1,5 @@
+<resources>
+    <string name="title_elixirs_details">Elixir Details</string>
+    <string name="title_inventor">Inventor</string>
+    <string name="title_ingredient">Ingredient</string>
+</resources>

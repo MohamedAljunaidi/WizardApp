@@ -1,24 +1,30 @@
 package com.assignment.hometab.navigation
 
+import android.content.Context
 import androidx.activity.OnBackPressedDispatcher
 import androidx.compose.ui.Modifier
+import androidx.core.os.bundleOf
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.assignment.direction.elixirs.ElixirNavigator
+import com.assignment.direction.elixirs.ElixirsDestinationEnum
+import com.assignment.extension.navigateToDirection
 import com.assignment.hometab.presentation.favorite.FavoriteRoute
-import com.assignment.hometab.presentation.home.HomeScreen
+import com.assignment.hometab.presentation.wizard.HomeScreen
 import com.assignment.hometab.presentation.wizarddetails.WizardDetailsScreen
 import com.assignment.navigation.constants.NavigationConstants
 import com.assignment.navigation.constants.NavigationConstants.replaceParams
 
-fun NavGraphBuilder.homeNavigation(
+fun NavGraphBuilder.wizardNavigation(
     navController: NavHostController,
     modifier: Modifier = Modifier
 ) {
-    homeRoute(
+
+    wizardRoute(
         modifier = modifier,
         onWizardItemClick = navController::navigateToWizardDetailsScreen,
     )
@@ -32,12 +38,19 @@ fun NavGraphBuilder.homeNavigation(
         modifier = modifier,
         onBackBtnClick = { backDispatcher ->
             backDispatcher?.onBackPressed()
+        },
+        onElixirItemClick = { context, elixirsId ->
+            ElixirNavigator.navigateToDirection(
+                context,
+                destination = ElixirsDestinationEnum.ELIXIRS_DETAILS,
+                data = bundleOf(NavigationConstants.ELIXIR_ID_PARAMS to elixirsId),
+            )
         }
     )
 
 }
 
-fun NavGraphBuilder.homeRoute(
+fun NavGraphBuilder.wizardRoute(
     modifier: Modifier = Modifier,
     onWizardItemClick: (String) -> Unit,
 ) {
@@ -63,6 +76,7 @@ fun NavGraphBuilder.favoriteRoute(
 fun NavGraphBuilder.wizardDetailsRoute(
     modifier: Modifier = Modifier,
     onBackBtnClick: (OnBackPressedDispatcher?) -> Unit,
+    onElixirItemClick: (Context, String) -> Unit,
 ) {
     composable(
         route = NavigationConstants.WIZARD_DETAILS_PATH,
@@ -80,7 +94,8 @@ fun NavGraphBuilder.wizardDetailsRoute(
 
         WizardDetailsScreen(
             modifier = modifier,
-            onBackBtnClick = onBackBtnClick, wizardId = wizardID
+            onBackBtnClick = onBackBtnClick, wizardId = wizardID,
+            onElixirItemClick = onElixirItemClick
         )
     }
 }

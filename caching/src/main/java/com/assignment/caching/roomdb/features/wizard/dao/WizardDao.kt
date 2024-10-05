@@ -4,8 +4,11 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Transaction
 import com.assignment.caching.roomdb.common.BaseDao
+import com.assignment.caching.roomdb.features.wizard.entities.FavoriteEntity
 import com.assignment.caching.roomdb.features.wizard.entities.WizardEntity
+import com.assignment.caching.roomdb.features.wizard.entities.WizardWithFavoriteEntity
 
 @Dao
 interface WizardDao: BaseDao<WizardEntity> {
@@ -14,17 +17,14 @@ interface WizardDao: BaseDao<WizardEntity> {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertWizard(obj: List<WizardEntity>)
 
-    @Query("SELECT * FROM WizardEntity")
-    fun getWizardEntity(): List<WizardEntity>? {
-        val result = actualGetWizardEntity()
-        return result.ifEmpty { null }
-    }
-
-    @Query("SELECT * FROM WizardEntity")
+    @Query("SELECT * FROM wizard_table")
     fun actualGetWizardEntity(): List<WizardEntity>
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertFavorite(favorite: FavoriteEntity)
 
-    @Query("DELETE FROM WizardEntity")
-    fun deleteAllData()
+    @Transaction
+    @Query("SELECT * FROM wizard_table")
+    suspend fun getWizardsWithFavorite(): List<WizardWithFavoriteEntity>
 
 }

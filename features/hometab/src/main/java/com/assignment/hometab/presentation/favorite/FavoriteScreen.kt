@@ -57,11 +57,11 @@ fun FavoriteScreen(
         onNavigationIconClick = onBackBtnClick
     ) {
         val context = LocalContext.current
-        Scaffold(
+        Box(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(it)
-        ) { _ ->
+        ) {
 
             LazyColumn {
                 item {

@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="hint_search_wizard">Search (ex: Fred)</string>
+    <string name="title_wizard_list">Wizard List</string>
+    <string name="elixirs_count">%s Elixirs</string>
+    <string name="title_wizard_details">Wizard Details</string>
+    <string name="title_home_tab">Home</string>
+    <string name="title_favorite_tab">Favorite</string>
 
 </resources>

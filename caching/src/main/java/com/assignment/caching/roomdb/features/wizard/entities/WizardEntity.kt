@@ -5,8 +5,8 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
-@Entity
-class WizardEntity(
+@Entity(tableName = "wizard_table")
+data  class WizardEntity(
 
     @SerializedName("id")
     @PrimaryKey
@@ -19,5 +19,5 @@ class WizardEntity(
     var lastName: String? = "",
 
     @SerializedName("elixirsCount")
-    var elixirsCount: String? = ""
+    var elixirsCount: String? = "",
 )

@@ -29,3 +29,4 @@ include(":navigation")
 
 include(":features")
 include(":features:hometab")
+include(":features:elixirs")

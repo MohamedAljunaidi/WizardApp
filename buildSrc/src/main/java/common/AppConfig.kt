@@ -41,7 +41,7 @@ object AppConfig {
         const val THEME = ":theme"
         const val CACHING = ":caching"
         const val HOME_TAB = ":features:hometab"
-        const val SEARCH = ":features:search"
+        const val ELIXIRS = ":features:elixirs"
     }
 
 

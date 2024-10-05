@@ -5,6 +5,7 @@ import com.assignment.core.extensions.networkBoundResource
 import com.assignment.core.extensions.resultWrapperData
 import com.assignment.core.model.ResultWrapper
 import com.assignment.hometab.domain.wizard.model.Wizard
+import com.assignment.hometab.domain.wizard.model.WizardWithFavorite
 import com.assignment.hometab.domain.wizard.repository.IWizardLocalRepository
 import com.assignment.hometab.domain.wizard.repository.IWizardRemoteRepository
 import kotlinx.coroutines.flow.Flow
@@ -17,13 +18,13 @@ class GetWizardListUseCase @Inject constructor(
     private val remoteRepository: IWizardRemoteRepository,
     private val localRepository: IWizardLocalRepository
 ) :
-    BaseUseCase<Map<String, String>, Flow<ResultWrapper<List<Wizard?>?>>> {
-    private var response: Flow<ResultWrapper<List<Wizard>?>> = emptyFlow()
+    BaseUseCase<Map<String, String>, Flow<ResultWrapper<List<WizardWithFavorite?>?>>> {
+    private var response: Flow<ResultWrapper<List<WizardWithFavorite>?>> = emptyFlow()
 
-    override suspend fun invoke(params: Map<String, String>?): Flow<ResultWrapper<List<Wizard>?>> =
+    override suspend fun invoke(params: Map<String, String>?): Flow<ResultWrapper<List<WizardWithFavorite>?>> =
         networkBoundResource(
             queryDb = {
-                localRepository.getWizards()
+                localRepository.getWizardWithFavorite()
             },
             fetchApi = {
                 remoteRepository.getWizards()
@@ -33,13 +34,14 @@ class GetWizardListUseCase @Inject constructor(
                     this.response = flowOf(resultWrapper)
 
                     resultWrapperData(resultWrapper, { wizard ->
-                        localRepository.insertWizards(wizard = wizard).collect()
+                        localRepository.insertWizards(wizard = wizard?.map { it.wizard }).collect()
                     }, {
-                        localRepository.getWizards()
+                        localRepository.getWizardWithFavorite()
                     })
                 }
             }, onQueryDbError = {
                 response
+
             }
         )
 }

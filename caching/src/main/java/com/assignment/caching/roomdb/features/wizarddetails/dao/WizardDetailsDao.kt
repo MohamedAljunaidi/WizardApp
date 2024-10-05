@@ -8,8 +8,6 @@ import com.assignment.caching.roomdb.features.wizarddetails.entities.WizardDetai
 @Dao
 interface WizardDetailsDao: BaseDao<WizardDetailsEntity> {
 
-
-
     @Query("SELECT * FROM WizardDetailsEntity WHERE id = :wizardId")
     fun getWizardDetailsEntity(wizardId:String): WizardDetailsEntity? {
         val result = actualWizardDetailsEntity(wizardId)

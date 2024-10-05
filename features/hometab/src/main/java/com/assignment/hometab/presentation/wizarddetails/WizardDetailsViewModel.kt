@@ -1,5 +1,7 @@
 package com.assignment.hometab.presentation.wizarddetails
 
+import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
 import com.assignment.core.bases.BaseViewModel
 import com.assignment.core.bases.BaseViewState
 import com.assignment.core.model.ResultWrapper
@@ -24,6 +26,23 @@ class WizardDetailsViewModel @Inject constructor(
     val wizardDetailsSuccess: StateFlow<WizardDetails?> =
         _wizardDetailsSuccess.asStateFlow()
 
+    private val _filteredElixirs = mutableStateOf<List<WizardDetails.Elixir?>>(emptyList())
+    val filteredElixirs: State<List<WizardDetails.Elixir?>> = _filteredElixirs
+
+    private val _searchQuery = mutableStateOf("")
+    val searchQuery: State<String> = _searchQuery
+
+    fun setSearchQuery(query: String) {
+        _searchQuery.value = query
+        filteredElixirs()
+    }
+
+    private fun filteredElixirs() {
+        val query = _searchQuery.value.lowercase()
+        _filteredElixirs.value = _wizardDetailsSuccess.value?.elixirs?.filter { item ->
+            item?.name?.contains(query, ignoreCase = true) == true
+        } ?: emptyList()
+    }
 
     fun getWizardDetails(wizardId: String) {
 
@@ -40,6 +59,7 @@ class WizardDetailsViewModel @Inject constructor(
 
                         is ResultWrapper.Success -> {
                             _wizardDetailsSuccess.emit(result.data)
+                            filteredElixirs()
                         }
 
                         is ResultWrapper.Error -> {

@@ -1,4 +1,4 @@
-package com.assignment.direction.home
+package com.assignment.direction.wizard
 
 import android.content.Context
 import android.os.Bundle

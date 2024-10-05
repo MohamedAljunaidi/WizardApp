@@ -1,4 +1,4 @@
-package com.assignment.caching.roomdb.features.wizarddetails
+package com.assignment.caching.roomdb.features.wizarddetails.converter
 
 import com.assignment.caching.extensions.type
 import com.assignment.caching.roomdb.common.converter.ListConverter
