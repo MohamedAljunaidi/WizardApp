@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.Flow
 interface IWizardLocalRepository {
 
     fun getWizardWithFavorite(): Flow<ResultWrapper<List<WizardWithFavorite>?>>
+    fun getFavorites(): Flow<ResultWrapper<List<WizardWithFavorite>?>>
     fun insertWizards(wizard: List<Wizard>?): Flow<ResultWrapper<Unit?>>
     fun insertFavorite(favorite: Favorite): Flow<ResultWrapper<Unit?>>
 

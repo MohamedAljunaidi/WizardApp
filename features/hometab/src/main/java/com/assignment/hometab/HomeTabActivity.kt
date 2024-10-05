@@ -30,6 +30,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.compose.currentBackStackEntryAsState
 import com.assignment.theme.theme.color
 
 @AndroidEntryPoint
@@ -82,6 +83,9 @@ fun BottomNavigationBar(navController: NavHostController) {
             tonalElevation = 8.dp,
             containerColor = MaterialTheme.color.fieldColor
         ) {
+            val navBackStackEntry by navController.currentBackStackEntryAsState()
+            val currentRoute = navBackStackEntry?.destination?.route
+
             items.forEachIndexed { index, screen ->
                 val isSelected = index == selectedTab
 
@@ -90,11 +94,15 @@ fun BottomNavigationBar(navController: NavHostController) {
                     label = { Text(screen.name) },
                     selected = isSelected,
                     onClick = {
-                        selectedTab = index
-                        navController.navigate(screen.route) {
-                            popUpTo(navController.graph.startDestinationId)
-                            launchSingleTop = true
-                            restoreState = true
+                        if (currentRoute != screen.route) {
+                            selectedTab = index
+                            navController.navigate(screen.route) {
+                                popUpTo(navController.graph.startDestinationId) {
+                                    saveState = true
+                                }
+                                launchSingleTop = true
+                                restoreState = true
+                            }
                         }
                     },
 

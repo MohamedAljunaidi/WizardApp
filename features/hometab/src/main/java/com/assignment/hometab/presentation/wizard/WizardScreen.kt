@@ -22,6 +22,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -47,6 +48,9 @@ internal fun HomeScreen(
     onWizardItemClick: (String) -> Unit,
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    LaunchedEffect(Unit) {
+        viewModel.getWizardList()
+    }
 
     BaseScreen(
         baseViewState = state,
@@ -127,8 +131,9 @@ private fun WizardListItem(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Column(
-                    modifier = Modifier
-                        .clickable { onItemClick(wizards.wizard.id ?: "") }
+                    modifier = Modifier.weight(1f)
+                        .clickable { onItemClick(wizards.wizard.id ?: "")
+                        }
                 ) {
                     Text(
                         text = wizards.wizard.firstName + wizards.wizard.lastName,

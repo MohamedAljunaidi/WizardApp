@@ -22,6 +22,10 @@ class RoomManager @Inject constructor(private val databaseRoom: DatabaseRoom) : 
         safeLocalDataCall {
             databaseRoom.wizardDao().getWizardsWithFavorite()
         }
+    override suspend fun getFavorites() =
+        safeLocalDataCall {
+            databaseRoom.wizardDao().getFavorites()
+        }
 
 
     override suspend fun insertWizardDetails(wizardDetailsEntity: WizardDetailsEntity): ResultWrapper<Unit> =

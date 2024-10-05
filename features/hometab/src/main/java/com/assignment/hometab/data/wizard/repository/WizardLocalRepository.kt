@@ -30,6 +30,16 @@ class WizardLocalRepository(private val cachingManager: CachingManager) :
         emit(result)
     }
 
+    override fun getFavorites(): Flow<ResultWrapper<List<WizardWithFavorite>?>> = flow {
+        val result = tryMapperQuery({
+            cachingManager.getProvider(ProviderEnum.ROOM).getFavorites()
+        })
+        { weather ->
+            weather?.entityToWizardWithFavoriteList()
+        }
+        emit(result)
+    }
+
 
     override fun insertWizards(wizard: List<Wizard>?): Flow<ResultWrapper<Unit?>> =
         flow {

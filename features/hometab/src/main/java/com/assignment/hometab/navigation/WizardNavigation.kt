@@ -13,7 +13,7 @@ import androidx.navigation.navArgument
 import com.assignment.direction.elixirs.ElixirNavigator
 import com.assignment.direction.elixirs.ElixirsDestinationEnum
 import com.assignment.extension.navigateToDirection
-import com.assignment.hometab.presentation.favorite.FavoriteRoute
+import com.assignment.hometab.presentation.favorite.FavoriteScreen
 import com.assignment.hometab.presentation.wizard.HomeScreen
 import com.assignment.hometab.presentation.wizarddetails.WizardDetailsScreen
 import com.assignment.navigation.constants.NavigationConstants
@@ -30,9 +30,8 @@ fun NavGraphBuilder.wizardNavigation(
     )
 
     favoriteRoute(
-        onBackBtnClick = { backDispatcher ->
-            backDispatcher?.onBackPressed()
-        }
+        modifier = modifier,
+        onWizardItemClick = navController::navigateToWizardDetailsScreen,
     )
     wizardDetailsRoute(
         modifier = modifier,
@@ -64,11 +63,14 @@ fun NavGraphBuilder.wizardRoute(
 
 
 fun NavGraphBuilder.favoriteRoute(
-    onBackBtnClick: (OnBackPressedDispatcher?) -> Unit,
+    modifier: Modifier = Modifier,
+    onWizardItemClick: (String) -> Unit,
 ) {
     composable(route = NavigationConstants.FAVORITE_PATH) {
-        FavoriteRoute(
-            onBackBtnClick = onBackBtnClick
+        FavoriteScreen(
+            modifier = modifier,
+            onFavoriteItemClick = onWizardItemClick
+
         )
     }
 }

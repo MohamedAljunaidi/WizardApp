@@ -11,7 +11,7 @@ import com.assignment.caching.roomdb.features.wizard.entities.WizardEntity
 import com.assignment.caching.roomdb.features.wizard.entities.WizardWithFavoriteEntity
 
 @Dao
-interface WizardDao: BaseDao<WizardEntity> {
+interface WizardDao : BaseDao<WizardEntity> {
 
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -26,5 +26,14 @@ interface WizardDao: BaseDao<WizardEntity> {
     @Transaction
     @Query("SELECT * FROM wizard_table")
     suspend fun getWizardsWithFavorite(): List<WizardWithFavoriteEntity>
+
+    @Transaction
+    @Query("""
+    SELECT * FROM wizard_table 
+    INNER JOIN favorite_table ON wizard_table.id = favorite_table.wizardId
+    WHERE favorite_table.isFavorite = 1
+""")
+    suspend fun getFavorites(): List<WizardWithFavoriteEntity>
+
 
 }

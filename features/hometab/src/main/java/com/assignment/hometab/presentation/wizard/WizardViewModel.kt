@@ -30,9 +30,6 @@ class WizardViewModel @Inject constructor(
     private val _searchQuery = mutableStateOf("")
     val searchQuery: State<String> = _searchQuery
 
-    init {
-        getWizardList()
-    }
 
     fun setSearchQuery(query: String) {
         _searchQuery.value = query

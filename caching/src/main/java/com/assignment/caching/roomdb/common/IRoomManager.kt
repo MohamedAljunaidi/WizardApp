@@ -13,13 +13,18 @@ interface IRoomManager {
     suspend fun insertFavorite(favoriteEntity: FavoriteEntity): ResultWrapper<Unit>? = null
 
     suspend fun getWizardWithFavorite(): ResultWrapper<List<WizardWithFavoriteEntity>?>? = null
+    suspend fun getFavorites(): ResultWrapper<List<WizardWithFavoriteEntity>?>? = null
 
-    suspend fun insertWizardDetails(wizardDetailsEntity: WizardDetailsEntity): ResultWrapper<Unit>? = null
-    suspend fun getWizardDetails(wizardId:String): ResultWrapper<WizardDetailsEntity>? = null
+    suspend fun insertWizardDetails(wizardDetailsEntity: WizardDetailsEntity): ResultWrapper<Unit>? =
+        null
+
+    suspend fun getWizardDetails(wizardId: String): ResultWrapper<WizardDetailsEntity>? = null
 
 
-    suspend fun insertElixirDetails(elixirDetailsEntity: ElixirDetailsEntity): ResultWrapper<Unit>? = null
-    suspend fun getElixirDetails(elixirId:String): ResultWrapper<ElixirDetailsEntity>? = null
+    suspend fun insertElixirDetails(elixirDetailsEntity: ElixirDetailsEntity): ResultWrapper<Unit>? =
+        null
+
+    suspend fun getElixirDetails(elixirId: String): ResultWrapper<ElixirDetailsEntity>? = null
 
 
 }

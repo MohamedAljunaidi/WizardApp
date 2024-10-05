@@ -1,90 +1,174 @@
 package com.assignment.hometab.presentation.favorite
 
-import androidx.activity.OnBackPressedDispatcher
-import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.outlined.FavoriteBorder
+import androidx.compose.material3.Card
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.assignment.core.bases.BaseScreen
+import com.assignment.hometab.R
+import com.assignment.theme.component.SearchBarView
+import com.assignment.hometab.domain.wizard.model.WizardWithFavorite
 import com.assignment.theme.component.ScaffoldTopAppbar
+import com.assignment.theme.theme.Gray10
+import com.assignment.theme.theme.Shapes
+import com.assignment.theme.theme.Typography
 import com.assignment.theme.theme.color
 
 @Composable
-internal fun FavoriteRoute(
+internal fun FavoriteScreen(
+    modifier: Modifier = Modifier,
     viewModel: FavoriteViewModel = hiltViewModel(),
-    onBackBtnClick: (OnBackPressedDispatcher?) -> Unit,
+    onFavoriteItemClick: (String) -> Unit,
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
-
-    val backDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
+    LaunchedEffect(Unit) {
+        viewModel.getFavoriteList()
+    }
 
     BaseScreen(
         baseViewState = state,
         content = {
-            FavoriteScreen(
-                onBackBtnClick = {
-                    onBackBtnClick.invoke(backDispatcher)
-                },
+            FavoriteListScreen(
+                modifier = modifier,
+                onFavoriteItemClick = onFavoriteItemClick,
+                viewModel = viewModel
             )
+        },
+        onRetry = {
+            viewModel.getFavoriteList()
         }
     )
 
 }
 
 @Composable
-fun FavoriteScreen(
-    onBackBtnClick: () -> Unit,
+fun FavoriteListScreen(
+    modifier: Modifier = Modifier,
+    onFavoriteItemClick: (String) -> Unit,
+    viewModel: FavoriteViewModel,
 ) {
+
     ScaffoldTopAppbar(
-        title = "Favorite List",
-        containerColor = MaterialTheme.color.secondaryBackground,
-        onNavigationIconClick = onBackBtnClick
+        title = stringResource(id = R.string.title_favorite_list)
     ) {
-        val context = LocalContext.current
         Box(
-            modifier = Modifier
+            modifier = modifier
                 .fillMaxSize()
                 .padding(it)
         ) {
+            var search = viewModel.searchQuery.value
+            val filteredFavorites by viewModel.filteredFavorite
 
             LazyColumn {
                 item {
-                    Box(modifier = Modifier.padding(16.dp)){
-
-                        OutlinedTextField(
-                            value = "",
-                            enabled = false,
-                            onValueChange = { },
-                            label = { Text("Search") },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .clickable {
-
-
-                                }
-                        )
-                    }
-                    Spacer(modifier = Modifier.height(10.dp))
+                    SearchBarView(
+                        query = search,
+                        onQueryChange = { query ->
+                            search = query
+                            viewModel.setSearchQuery(query)
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp)
+                    )
                 }
-
+                items(items = filteredFavorites) { wizard ->
+                    FavoriteListItem(
+                        wizards = wizard,
+                        viewModel = viewModel,
+                        onItemClick = onFavoriteItemClick,
+                    )
+                }
             }
         }
     }
 
+}
+
+@Composable
+private fun FavoriteListItem(
+    modifier: Modifier = Modifier,
+    wizards: WizardWithFavorite,
+    viewModel: FavoriteViewModel,
+    onItemClick: (String) -> Unit,
+) {
+    Box(modifier = modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp)) {
+        Card(
+            shape = Shapes.medium,
+            border = BorderStroke(1.dp, Gray10),
+        ) {
+            Row(
+                modifier = modifier
+                    .padding(top = 12.dp, start = 12.dp, end = 20.dp, bottom = 12.dp)
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Column(
+                    modifier = Modifier
+                        .clickable { onItemClick(wizards.wizard.id ?: "") }
+                ) {
+                    Text(
+                        text = wizards.wizard.firstName + wizards.wizard.lastName,
+                        style = Typography.titleMedium,
+                        maxLines = 2,
+                        color = MaterialTheme.color.black,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                    Spacer(modifier = modifier.height(10.dp))
+
+                    Text(
+                        text = stringResource(
+                            R.string.elixirs_count,
+                            wizards.wizard.elixirsCount ?: "0"
+                        ),
+                        style = Typography.titleSmall,
+                        color = MaterialTheme.color.subTitleColor
+                    )
+                }
+
+                Icon(
+                    imageVector = if (wizards.favorite?.isFavorite == true) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
+                    contentDescription = "Favorite",
+                    tint = Color.Red,
+                    modifier = Modifier
+                        .size(24.dp)
+                        .clickable {
+                            viewModel.updateFavorite(
+                                (wizards.favorite?.isFavorite?.not() ?: true),
+                                wizards.wizard.id ?: ""
+                            )
+
+
+                        }
+                )
+            }
+        }
+    }
 }

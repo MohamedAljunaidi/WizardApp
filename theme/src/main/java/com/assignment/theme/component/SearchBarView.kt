@@ -6,6 +6,8 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
+import com.assignment.theme.R
 import com.assignment.theme.theme.color
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -18,10 +20,10 @@ fun SearchBarView(
     SearchBar(
         query = query,
         onQueryChange = onQueryChange,
-        onSearch = { } ,
+        onSearch = { },
         active = false,
         onActiveChange = { },
-        placeholder = { Text("Search (ex: Fred)") },
+        placeholder = { Text(stringResource(id = R.string.hint_search_wizard)) },
         leadingIcon = {
             Icon(
                 imageVector = Icons.Default.Search,
