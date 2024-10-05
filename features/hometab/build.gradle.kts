@@ -3,7 +3,7 @@ import dependencies.Dependencies
 import dependencies.DependencyGroups
 import extensions.implementation
 import extensions.kapt
-
+import extensions.testImplementation
 plugins {
     id("common.base-android-library")
     id("dagger.hilt.android.plugin")
@@ -67,4 +67,6 @@ dependencies {
     androidTestImplementation(Dependencies.composeUiTestJunit4)
     androidTestImplementation(Dependencies.composeTooling)
     androidTestImplementation(Dependencies.composeUiTestManifest)
+    testImplementation(DependencyGroups.mockitoTestImplementation)
+
 }

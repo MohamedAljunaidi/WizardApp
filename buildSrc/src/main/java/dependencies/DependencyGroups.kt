@@ -31,7 +31,12 @@ object DependencyGroups {
         add(Dependencies.converterGson)
         add(Dependencies.loggingInterceptor)
     }
-
+    val mockitoTestImplementation = arrayListOf<String>().apply {
+        add(Dependencies.mockitoCore)
+        add(Dependencies.mockitoInline)
+        add(Dependencies.turbine)
+        add(Dependencies.coroutinesTest)
+    }
 
     val androidDependencies = arrayListOf<String>().apply {
         add(Dependencies.core)

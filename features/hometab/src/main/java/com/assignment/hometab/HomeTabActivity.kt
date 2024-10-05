@@ -87,6 +87,9 @@ fun BottomNavigationBar(navController: NavHostController) {
             val currentRoute = navBackStackEntry?.destination?.route
 
             items.forEachIndexed { index, screen ->
+                if (currentRoute == NavigationConstants.HOME_PATH) {
+                    selectedTab = 0
+                }
                 val isSelected = index == selectedTab
 
                 NavigationBarItem(

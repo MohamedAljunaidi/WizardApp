@@ -24,4 +24,8 @@ object DependencyVersions {
     const val hilt_navigation_version = "1.2.0"
     const val navigation_version = "2.8.2"
     const val room_version = "2.6.1"
+    const val mockito_core_version = "3.12.4"
+    const val mockito_inline_version = "2.13.0"
+    const val coroutines_test_version = "1.6.4"
+    const val turbine_version = "0.12.1"
 }

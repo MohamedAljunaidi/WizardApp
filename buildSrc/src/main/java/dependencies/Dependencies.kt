@@ -68,4 +68,13 @@ object Dependencies {
     const val room = "androidx.room:room-ktx:${DependencyVersions.room_version}"
     const val roomCompiler = "androidx.room:room-compiler:${DependencyVersions.room_version}"
 
+
+    const val mockitoCore = "org.mockito:mockito-core:${DependencyVersions.mockito_core_version}"
+    const val mockitoInline =
+        "org.mockito:mockito-inline:${DependencyVersions.mockito_inline_version}"
+    const val coroutinesTest = "org.jetbrains.kotlinx:kotlinx-coroutines-test:${
+        DependencyVersions.coroutines_test_version
+    }"
+    const val turbine = "app.cash.turbine:turbine:${DependencyVersions.turbine_version}"
+
 }
