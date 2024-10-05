@@ -18,14 +18,17 @@ interface WizardDao : BaseDao<WizardEntity> {
     suspend fun insertWizard(obj: List<WizardEntity>)
 
     @Query("SELECT * FROM wizard_table")
-    fun actualGetWizardEntity(): List<WizardEntity>
+    fun actualGetWizardEntity(): List<WizardWithFavoriteEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertFavorite(favorite: FavoriteEntity)
 
     @Transaction
     @Query("SELECT * FROM wizard_table")
-    suspend fun getWizardsWithFavorite(): List<WizardWithFavoriteEntity>
+    suspend fun getWizardsWithFavorite(): List<WizardWithFavoriteEntity>?{
+        val result = actualGetWizardEntity()
+        return result.ifEmpty { null }
+    }
 
     @Transaction
     @Query("""

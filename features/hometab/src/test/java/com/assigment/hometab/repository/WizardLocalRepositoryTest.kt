@@ -21,7 +21,6 @@ import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.junit.MockitoJUnitRunner
 
-
 private val SUCCESS_WIZARD_LIST_RESPONSE: List<WizardWithFavoriteEntity> =
     listOf(
         WizardWithFavoriteEntity(

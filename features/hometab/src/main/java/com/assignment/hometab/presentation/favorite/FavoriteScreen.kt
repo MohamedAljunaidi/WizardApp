@@ -131,7 +131,7 @@ private fun FavoriteListItem(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Column(
-                    modifier = Modifier
+                    modifier = Modifier.weight(1f)
                         .clickable { onItemClick(wizards.wizard.id ?: "") }
                 ) {
                     Text(
